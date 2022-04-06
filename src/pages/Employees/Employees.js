@@ -7,6 +7,8 @@ import useTable from "../../components/useTable";
 import * as employeeService from "../../services/employeeService";
 import Controls from "../../components/controls/Controls";
 import { Search } from "@material-ui/icons";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -59,6 +61,17 @@ export default function Employees() {
                 icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
             />
             <Paper className={classes.pageContent}>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}>
+                            <Typography>Employee Form</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <EmployeeForm />
+                    </AccordionDetails>
+                </Accordion>
+            </Paper>
+            <Paper className={classes.pageContent}>
                 {/* <EmployeeForm /> */}
                 <Toolbar>
                     <Controls.Input
@@ -77,12 +90,12 @@ export default function Employees() {
                     <TableBody>
                         {
                             recordsAfterPagingAndSorting().map(item =>
-                                (<TableRow key={item.id}>
-                                    <TableCell>{item.fullName}</TableCell>
-                                    <TableCell>{item.email}</TableCell>
-                                    <TableCell>{item.mobile}</TableCell>
-                                    <TableCell>{item.department}</TableCell>
-                                </TableRow>)
+                            (<TableRow key={item.id}>
+                                <TableCell>{item.fullName}</TableCell>
+                                <TableCell>{item.email}</TableCell>
+                                <TableCell>{item.mobile}</TableCell>
+                                <TableCell>{item.department}</TableCell>
+                            </TableRow>)
                             )
                         }
                     </TableBody>

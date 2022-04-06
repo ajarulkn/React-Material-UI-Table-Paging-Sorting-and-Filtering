@@ -6,9 +6,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#fdfdff'
     },
     pageHeader:{
-        padding:theme.spacing(4),
+        padding:theme.spacing(2),
         display:'flex',
-        marginBottom:theme.spacing(2)
+        marginBottom:theme.spacing(1)
     },
     pageIcon:{
         display:'inline-block',
