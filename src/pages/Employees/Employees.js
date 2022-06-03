@@ -31,7 +31,7 @@ const headCells = [
 export default function Employees() {
 
     const classes = useStyles();
-    const [records, setRecords] = useState(employeeService.getAllEmployees())
+    const [records] = useState(employeeService.getAllEmployees())
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const [open, setOpen] = React.useState(false);
 
@@ -54,7 +54,7 @@ export default function Employees() {
         let target = e.target;
         setFilterFn({
             fn: items => {
-                if (target.value == "")
+                if (target.value === "")
                     return items;
                 else
                     return items.filter(x => x.fullName.toLowerCase().includes(target.value))
