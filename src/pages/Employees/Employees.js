@@ -7,8 +7,8 @@ import useTable from "../../components/useTable";
 import * as employeeService from "../../services/employeeService";
 import Controls from "../../components/controls/Controls";
 import { Search } from "@material-ui/icons";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogTitle } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -33,6 +33,15 @@ export default function Employees() {
     const classes = useStyles();
     const [records, setRecords] = useState(employeeService.getAllEmployees())
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const {
         TblContainer,
@@ -61,18 +70,21 @@ export default function Employees() {
                 icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
             />
             <Paper className={classes.pageContent}>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}>
-                            <Typography>Employee Form</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <EmployeeForm />
-                    </AccordionDetails>
-                </Accordion>
-            </Paper>
-            <Paper className={classes.pageContent}>
-                {/* <EmployeeForm /> */}
+                <Button size="large"
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon/>}
+                    style={{float: "right"}}
+                    onClick={handleClickOpen}
+                    >
+                    Add Employee
+                </Button>
+                <Dialog open={open} onClose={handleClose} aria-labelledby="customized-dialog-title">
+                    <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                        Employee Form
+                    </DialogTitle>
+                    <EmployeeForm />
+                </Dialog>
                 <Toolbar>
                     <Controls.Input
                         label="Search Employees"
