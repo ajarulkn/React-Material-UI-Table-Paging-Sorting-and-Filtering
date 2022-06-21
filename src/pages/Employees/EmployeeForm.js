@@ -60,7 +60,7 @@ export default function EmployeeForm() {
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} style={{padding:'15px'}}>
             <Grid container>
                 <Grid item xs={6}>
                     <Controls.Input
