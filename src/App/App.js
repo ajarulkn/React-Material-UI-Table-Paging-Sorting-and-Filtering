@@ -5,6 +5,9 @@ import { makeStyles, CssBaseline, createMuiTheme, ThemeProvider } from '@materia
 import Header from "../components/Header";
 import PageHeader from '../components/PageHeader';
 import AppleIcon from '@material-ui/icons/Apple';
+import SignIn from './SignIn';
+import { auth } from '../util/firebase-config'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 import Employees from "../pages/Employees/Employees";
 
@@ -22,16 +25,16 @@ const theme = createMuiTheme({
       default: "#f4f5fd"
     },
   },
-  overrides:{
-    MuiAppBar:{
-      root:{
-        transform:'translateZ(0)'
+  overrides: {
+    MuiAppBar: {
+      root: {
+        transform: 'translateZ(0)'
       }
     }
   },
-  props:{
-    MuiIconButton:{
-      disableRipple:true
+  props: {
+    MuiIconButton: {
+      disableRipple: true
     }
   }
 })
@@ -46,19 +49,26 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
+  const [user] = useAuthState(auth)
+
+  const Dashboard = () => {
+    return (
+      <ThemeProvider theme={theme}>
+        <PageHeader title='Company Name' subTitle='Information Details' icon={<AppleIcon />}></PageHeader>
+        <SideMenu />
+        <div className={classes.appMain}>
+          <Header />
+          <Employees />
+        </div>
+        <CssBaseline />
+      </ThemeProvider>
+    )
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <PageHeader title='Company Name' subTitle = 'Information Details' icon={<AppleIcon/>}></PageHeader>
-      <SideMenu />
-      <div className={classes.appMain}>
-        
-        <Header />
-        
-        <Employees />
-      </div>
-      <CssBaseline />
-    </ThemeProvider>
+    <>
+      {user ? <Dashboard /> : <SignIn />}
+    </>
   );
 }
 
