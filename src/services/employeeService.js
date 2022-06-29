@@ -31,22 +31,11 @@ export async function getDepartmentData() {
     return map;
 }
 
-export function insertEmployee(data) {
-    let employees = getAllEmployees();
-    data['id'] = generateEmployeeId()
-    employees.push(data)
+export async function insertEmployee(data) {
+    let employees = await getAllEmployees();
+    data['id'] = Math.max(...employees.map(o => o.id)) + 1
 
-    //const empref = collection(db, "employee");
-    //addDoc(empref, data);
-    localStorage.setItem(KEYS.employees, JSON.stringify(employees))
-}
-
-export function generateEmployeeId() {
-    if (localStorage.getItem(KEYS.employeeId) == null)
-        localStorage.setItem(KEYS.employeeId, '0')
-    var id = parseInt(localStorage.getItem(KEYS.employeeId))
-    localStorage.setItem(KEYS.employeeId, (++id).toString())
-    return id;
+    db.collection("employee").add(data);
 }
 
 export async function getAllEmployees() {
