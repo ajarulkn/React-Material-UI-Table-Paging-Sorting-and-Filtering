@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from 'firebase'
 import { auth } from '../util/firebase-config'
 import { Button, TextField } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert';
+import { useAuth } from '../contexts/AuthContext';
+import { Link, useNavigate } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
     'buttoncss': {
@@ -12,10 +15,37 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn() {
     const classes = useStyles();
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const { login } = useAuth()
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
-    function signInWithGoogle() {
+    async function signInWithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider()
-        auth.signInWithPopup(provider)
+        try {
+            setError("")
+            await auth.signInWithPopup(provider)
+            navigate("/home")
+        } catch {
+            setError("Failed to sign.")
+        }
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+
+        try {
+            setError("")
+            setLoading(true)
+            await login(emailRef.current.value, passwordRef.current.value)
+            navigate("/home")
+        } catch {
+            setError("Failed to log in")
+        }
+
+        setLoading(false)
     }
 
     const Login = () => {
@@ -24,6 +54,7 @@ function SignIn() {
                 <div className="heading-container">
                     <h1>Login Form</h1>
                 </div>
+                {error && <Alert severity="error">{error}</Alert>}
                 <form>
                     <div style={{ margin: '0px 10px 10px 0px' }}>
                         <TextField
@@ -32,6 +63,8 @@ function SignIn() {
                             variant="outlined"
                             color="primary"
                             margin='dense'
+                            inputRef={emailRef}
+                            required
                         />
                         <br></br>
                         <TextField
@@ -40,10 +73,12 @@ function SignIn() {
                             variant="outlined"
                             color="primary"
                             margin='dense'
+                            inputRef={passwordRef}
+                            required
                         />
                     </div>
                     <div>
-                        <Button color='primary' variant='contained' style={{ margin: '0px 10px 10px 0px' }}>Login</Button>
+                        <Button color='primary' variant='contained' style={{ margin: '0px 10px 10px 0px' }} onClick={handleSubmit}>Login</Button>
                         <Button color='secondary' variant='contained' style={{ margin: '0px 10px 10px 0px' }}>Reset</Button>
                     </div>
                 </form>

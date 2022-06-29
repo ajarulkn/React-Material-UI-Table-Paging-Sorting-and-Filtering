@@ -1,4 +1,6 @@
 import React from 'react';
+import { AuthProvider } from "../contexts/AuthContext"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './App.css';
 import SideMenu from "../components/SideMenu";
 import { makeStyles, CssBaseline, createMuiTheme, ThemeProvider } from '@material-ui/core';
@@ -6,9 +8,6 @@ import Header from "../components/Header";
 import PageHeader from '../components/PageHeader';
 import AppleIcon from '@material-ui/icons/Apple';
 import SignIn from './SignIn';
-import { auth } from '../util/firebase-config'
-import { useAuthState } from 'react-firebase-hooks/auth'
-
 import Employees from "../pages/Employees/Employees";
 
 const theme = createMuiTheme({
@@ -49,7 +48,6 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  const [user] = useAuthState(auth)
 
   const Dashboard = () => {
     return (
@@ -66,9 +64,16 @@ function App() {
   };
 
   return (
-    <>
-      {user ? <Dashboard /> : <SignIn />}
-    </>
+    <div className="app">
+      <Router>
+        <AuthProvider>
+          <Routes>
+            <Route exact path="/" element={<SignIn />} />
+            <Route exact path="/home" element={<Dashboard/>} />
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </div>
   );
 }
 
